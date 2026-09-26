@@ -1,0 +1,52 @@
+services:
+  # ---------- MQTT Broker ----------
+  mosquitto:
+    image: eclipse-mosquitto:2
+    container_name: mosquitto
+    restart: unless-stopped
+    ports:
+      - "1883:1883"   # MQTT (internal / localhost only แนะนำ)
+      - "9001:9001"   # MQTT over WebSocket (สำหรับ ESP32 ผ่าน Cloudflare Tunnel)
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+    networks:
+      - main-network
+
+  # ---------- Telegraf: MQTT -> InfluxDB (external) ----------
+  telegraf:
+    image: telegraf:1.30
+    container_name: telegraf
+    restart: unless-stopped
+    depends_on:
+      - mosquitto
+    environment:
+      - INFLUX_TOKEN=${INFLUX_TOKEN}
+      - INFLUX_ORG=${INFLUX_ORG}
+      - INFLUX_BUCKET=${INFLUX_BUCKET}
+      - MQTT_USER=${MQTT_USER}
+      - MQTT_PASSWORD=${MQTT_PASSWORD}
+    volumes:
+      - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+    networks:
+      - main-network
+
+  # ---------- Node-RED ----------
+  nodered:
+    image: nodered/node-red:latest
+    container_name: nodered
+    restart: unless-stopped
+    ports:
+      - "1880:1880"
+    volumes:
+      - ./nodered/data:/data
+    networks:
+      - main-network
+    depends_on:
+      - mosquitto
+
+networks:
+  main-network:
+    driver: bridge
+

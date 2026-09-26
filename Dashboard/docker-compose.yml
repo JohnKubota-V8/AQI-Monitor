@@ -1,0 +1,21 @@
+services:
+  dashboard:
+    image: air-quality-dashboard:latest
+    container_name: sensor-dashboard
+    ports:
+      - "3000:3000"
+    env_file:
+      - path: .env.local
+        required: false
+      - path: .env
+        required: false
+    environment:
+      - INFLUXDB_URL=${INFLUXDB_URL:-https://influxdb.milkbor.me}
+      - INFLUXDB_TOKEN=${INFLUXDB_TOKEN}
+      - INFLUXDB_ORG=${INFLUXDB_ORG:-my-org}
+      - INFLUXDB_BUCKET=${INFLUXDB_BUCKET:-MQTTProject}
+      - INFLUXDB_MEASUREMENT=${INFLUXDB_MEASUREMENT:-dht22}
+      - INFLUXDB_FIELD_TEMP=${INFLUXDB_FIELD_TEMP:-temp}
+      - INFLUXDB_FIELD_HUMID=${INFLUXDB_FIELD_HUMID:-humid}
+      - ALLOW_MOCK_FALLBACK=${ALLOW_MOCK_FALLBACK:-false}
+    restart: unless-stopped

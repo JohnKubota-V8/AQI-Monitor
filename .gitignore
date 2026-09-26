@@ -1,0 +1,10 @@
+# Local credentials and agent tooling
+.agents/
+MiniProject/secrets.h
+Dashboard/.env
+Dashboard/.env.local
+iot-stack/.env
+
+# Local build/export artifacts
+Dashboard/dashboard.tar
+iot-stack.zip

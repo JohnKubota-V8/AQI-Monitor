@@ -1,0 +1,5 @@
+.env
+mosquitto/data/
+mosquitto/log/
+mosquitto/config/passwd
+nodered/data/
