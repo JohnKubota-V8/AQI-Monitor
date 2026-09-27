@@ -1,7 +1,7 @@
 import { InfluxDB } from "@influxdata/influxdb-client";
 import { SensorReading, SensorHistoryPoint, SensorKey } from "@/types/sensor";
 
-export const INFLUX_URL = process.env.INFLUXDB_URL || "https://influxdb.milkbor.me";
+export const INFLUX_URL = process.env.INFLUXDB_URL || "";
 export const INFLUX_TOKEN = process.env.INFLUXDB_TOKEN || "";
 export const INFLUX_ORG = process.env.INFLUXDB_ORG || "my-org";
 export const INFLUX_BUCKET = process.env.INFLUXDB_BUCKET || "MQTTProject";
